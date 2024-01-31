@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+
+{% block title %} Y2matecom YouTube Downloader and Converter – Download YouTube videos in MP3, MP4, 3GP | Y2mate.com{% endblock title %}
+
+{% block body %}
+<div class="hero-banner">
+    <h1>Download Video and Audio from YouTube</h1>
+    <form action="" class="get_data">
+        {% csrf_token %}
+        <input type="text" name="get" placeholder="Search Query OR Paste Link Here..." class="form-y2-search" id="form-y2-search" value="">
+        {{ getform.as_p }}
+        <button type="submit" class="form-y2-submit">Search</button>
+    </form>
+    <p>By using our service you are accepting our <a href="<?php echo home_url();?>/privacy-policy">Privacy Policy</a>.</p>
+</div>
+<div class="result-wrapper" id="results"></div>
+<div class="content-wrapper video-downloader">
+    <h2>YouTube Video Downloader And Audio Converter</h2>
+    <p>Y2mate allows you to convert & download video from YouTube, Facebook, Video, Dailymotion, Youku, etc. to Mp3, Mp4 in HD quality. Y2mate supports downloading all video formats such as: MP4, M4V, 3GP, WMV, FLV, MO, MP3, WEBM, etc. You can easily download for free thousands of videos from YouTube and other websites.</p>
+</div>
+<div class="features-instruction">
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Instructions</h4>
+            <ol>
+                <li>Search by name or directly paste the Youtube Video Url to <a href="#form-y2-search" class="f-inherit">Coverter</a></li>
+                <li>Click "Search" button to begin converting and fetching process in Y2matecom</li>
+                <li>Select the video/audio format in fetch results</li>
+                <li>Click on Download button you want to download</li>
+            </ol>
+        </div>
+        <div class="col-md-6">
+            <h4>Features</h4>
+            <ol>
+                <li>Unlimited downloads and always free</li>
+                <li>High-speed video converter</li>
+                <li>No registration required</li>
+                <li>Support downloading with all formats MP4, Mp3</li>
+                <li>User Friendly Interface to interact</li>
+            </ol>
+        </div>
+    </div>
+</div>
+<div class="hero-grid-home">
+    <div class="row">
+        <div class="col-md-4">
+            <span class="glyphicon glyphicon-gift" aria-hidden="true"> </span>
+            <h4>Free Download</h4>
+            <p>Unlimited conversion and free download.</p>
+        </div>
+        <div class="col-md-4">
+            <span class="glyphicon glyphicon-film" aria-hidden="true"> </span>
+            <h4>Video & Audio</h4>
+            <p>Directly Download Video & Music.</p>
+        </div>
+        <div class="col-md-4">
+            <span class="glyphicon glyphicon-saved" aria-hidden="true"> </span>
+            <h4>Easy Download</h4>
+            <p>Fully compatible with all browsers.</p>
+        </div>
+    </div>
+</div>
+<div class="search-shortcut">
+<p><b>Tip:</b> Insert "<b>pp</b>" after the word "youtube" in the link to download videos and mp3 files from YouTube as a faster way.</p>
+<p><img src="/static/images/y2matecom-youtube-shortcut.png" alt="Y2matecom Youtube Shortcode"></p>
+<p>If you can’t directly download video to your PC, please follow the guidelines below:</p>
+<p>Step1: Select the format you want and click "Download" button. </p>
+<p>Step2: In new window, press "CTRL + S" to save video OR right click to video, then select "Save as Video".</p>
+</div>
+{% endblock body %}
+{% block customscript %}
+<script>
+jQuery(document).ready(function($){
+    function formValidate(form){
+        if(form.val().length > 0){
+            if(form.val().includes('youtube.com') || form.val().includes('youtu.be')){
+                const valuesInArray = $('.get_data').serializeArray();
+                const body = {};
+                valuesInArray.reduce((body, e)=>{
+                    body[e.name] = e.value
+                    return body
+                }, body);
+                getdata(body);
+            }else{
+                $('#results').html('<p class="error invalid-url">Invalid Url. Please check url and try again </p>');
+            }
+        }else{
+            $('#results').html('<p class="error url-blank">Url Required. Please provide valid url.</p>');
+        }
+    }
+    function fetchDlid(){
+        var sPageURL = $('.form-y2-search').val(),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+            }
+        }
+        return false;
+    } 
+    $.urlParam = function(name){
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec($('.form-y2-search').val());
+        if (results==null) {
+           return null;
+        }
+        return decodeURI(results[1]) || 0;
+    }
+    $('.get_data').on('submit', function(e){
+        e.preventDefault();
+        var form = $('.form-y2-search');
+        formValidate(form);
+    });
+    if($('.get_data').val().length > 0){
+        var form = $('.form-y2-search');
+        formValidate(form);
+    }
+    function kbtomb(size){
+        var sizeInMB = Math.round((size / (1024*1024)).toFixed(2));
+        if(sizeInMB == '0'){
+            sizeInMB = (size / (1024*1024)).toFixed(2);
+        }
+        return sizeInMB;
+    }
+    function indexOfMax(arr) { 
+        let maxIndex = 0; 
+        var returnindex = 0;
+        for (let i = 1; i < arr.length; i++) { 
+            if (arr[i]['abr'] > arr[maxIndex]['abr']) { 
+                maxIndex = i; 
+            } 
+        } 
+        return arr[maxIndex]['number']; 
+    } 
+    function getdata(form){
+        console.log(form);
+        $.ajax('{% url 'fetchdata' %}', {
+            type : 'POST',
+            data : form,
+            beforeSend : function(){
+                $('#results').html('<div class="result-thumb-wrapper result-loader">\
+                    <div class="thumb-wrapper">\
+                        <div class="thumb-img-wrapper">\
+                            <span class="loader-ele"></span>\
+                        </div>\
+                        <p class="title"><span class="loader-ele"></span><span class="loader-ele"></span></p>\
+                    </div>\
+                    <div class="result-content-wrapper">\
+                        <ul class="nav nav-pills">\
+                            <li class="nav-item">\
+                                <span class="loader-ele"></span>\
+                            </li>\
+                            <li class="nav-item">\
+                                <span class="loader-ele"></span>\
+                            </li>\
+                        </ul>\
+                        <div class="tab-content">\
+                            <span class="loader-ele"></span>\
+                        </div>\
+                    </div>\
+                </div>');
+            },
+            success: function(rdata){
+                console.log(rdata[0]['formats']);
+                var audioHtml = videoHtml = videoAudio = "";
+                var webmArray = []; 
+                var mp3id = "";
+                for(var i = 0; i < rdata[0]['formats'].length; i++){
+                    var formats = rdata[0]['formats'][i];
+                    if(formats['acodec'] != 'none' && formats['vcodec'] == 'none' && formats['ext'] == 'm4a'){
+                        mp3id = formats['format_id'];
+                        audioHtml += '<tr>\
+                            <td class="format">'+formats['ext']+'</td>\
+                            <td>'+kbtomb(formats['filesize'])+' MB</td>\
+                            <td><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=audio" class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
+                        </tr>';
+                    }
+                    if(formats['acodec'] != 'none' && formats['vcodec'] != 'none' && formats['ext'] == 'mp4'){
+                        videoAudio += '<tr>\
+                            <td class="format">'+formats['format_note']+'</td>\
+                            <td>'+kbtomb(formats['filesize'])+' MB</td>\
+                            <td><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=video"  class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
+                        </tr>';
+                    }
+                    if(formats['acodec'] == 'none' && formats['vcodec'] != 'none' && formats['ext'] == 'mp4'){
+                        videoHtml += '<tr>\
+                            <td class="format">'+formats['format_note']+'</td>\
+                            <td>'+kbtomb(formats['filesize'])+' MB</td>\
+                            <td><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'+'+mp3id+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=video"  class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
+                        </tr>';
+                    }
+                    if(formats['acodec'] != 'none' && formats['vcodec'] == 'none' && formats['ext'] == 'webm'){
+                        webmArray.push({'number': i,'abr': formats['abr']});
+                    }
+                };
+                if(webmArray.length > 0){
+                    var maxIndex = indexOfMax(webmArray);
+                    audioHtml += '<tr>\
+                        <td class="format">'+rdata[0]['formats'][maxIndex]['ext']+'</td>\
+                        <td>'+kbtomb(rdata[0]['formats'][maxIndex]['filesize'])+' MB</td>\
+                        <td><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+rdata[0]['formats'][maxIndex]['ext']+'&dlId='+$.urlParam('v')+'&type=audio"  class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
+                    </tr>';
+                }
+                var html = '<div class="result-thumb-wrapper">\
+                    <div class="thumb-wrapper">\
+                        <div class="thumb-img-wrapper">\
+                            <img src="'+rdata['0']['thumbnail']+'" alt="'+rdata['0']['title']+'">\
+                        </div>\
+                        <p class="title">'+rdata['0']['title']+'</p>\
+                    </div>\
+                    <div class="result-content-wrapper">\
+                        <ul class="nav nav-pills">\
+                            <li class="nav-item">\
+                                <a class="nav-link active" data-bs-toggle="pill" href="#audio">Audio</a>\
+                            </li>\
+                            <li class="nav-item">\
+                                <a class="nav-link" data-bs-toggle="pill" href="#video">Video</a>\
+                            </li>\
+                        </ul>\
+                        <div class="tab-content">\
+                            <div class="tab-pane container active" id="audio">\
+                                <table>\
+                                    <thead>\
+                                        <tr>\
+                                            <th>\
+                                                File Type\
+                                            </th>\
+                                            <th>\
+                                                File Size\
+                                            </th>\
+                                            <th>\
+                                                File Download\
+                                            </th>\
+                                        </tr>\
+                                    </thead>\
+                                    <tbody>'+audioHtml+'</tbody>\
+                                </table>\
+                            </div>\
+                            <div class="tab-pane container fade" id="video">\
+                                <table>\
+                                    <thead>\
+                                        <tr>\
+                                            <th>\
+                                                File Type\
+                                            </th>\
+                                            <th>\
+                                                File Size\
+                                            </th>\
+                                            <th>\
+                                                File Download\
+                                            </th>\
+                                        </tr>\
+                                    </thead>\
+                                    <tbody>'+videoAudio+videoHtml+'</tbody>\
+                                </table>\
+                            </div>\
+                        </div>\
+                    </div>\
+                </div>';
+
+                $('#results').html(html);
+            },
+            error: function(data){
+                console.log(data);
+            }
+
+        }); 
+    }
+
+    
+});
+</script>
+{% endblock customscript %}
