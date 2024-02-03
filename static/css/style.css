@@ -339,7 +339,9 @@ header.header .main-menu-wrapper ul li:last-child {
     border: 1px solid var(--theme-dark);
     border-radius: 5px;
 }
-
+a.btn.btn-primary.play-btn {
+    margin-right: 12px;
+}
 .result-thumb-wrapper .result-content-wrapper table td:nth-child(1), .result-thumb-wrapper .result-content-wrapper table td:nth-child(2) {
     width: 25%;
     font-weight: 500;
@@ -606,6 +608,9 @@ footer.footer  div#copyright {
     font-size: 20px;
     text-align: center;
     margin-bottom: 0;
+}
+.result-thumb-wrapper .result-content-wrapper table th:last-child {
+    text-align: end;
 }
 /*********Footer End***********/
 @media(min-width:992px){

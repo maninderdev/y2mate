@@ -176,21 +176,21 @@ jQuery(document).ready(function($){
                         audioHtml += '<tr>\
                             <td class="format">'+formats['ext']+'</td>\
                             <td>'+kbtomb(formats['filesize'])+' MB</td>\
-                            <td><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=audio" class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
+                            <td><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=audio" class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
                         </tr>';
                     }
                     if(formats['acodec'] != 'none' && formats['vcodec'] != 'none' && formats['ext'] == 'mp4'){
                         videoAudio += '<tr>\
                             <td class="format">'+formats['format_note']+'</td>\
                             <td>'+kbtomb(formats['filesize'])+' MB</td>\
-                            <td><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=video"  class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
+                            <td><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=video"  class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
                         </tr>';
                     }
                     if(formats['acodec'] == 'none' && formats['vcodec'] != 'none' && formats['ext'] == 'mp4'){
                         videoHtml += '<tr>\
                             <td class="format">'+formats['format_note']+'</td>\
                             <td>'+kbtomb(formats['filesize'])+' MB</td>\
-                            <td><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'+'+mp3id+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=video"  class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
+                            <td><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'+'+mp3id+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=video"  class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
                         </tr>';
                     }
                     if(formats['acodec'] != 'none' && formats['vcodec'] == 'none' && formats['ext'] == 'webm'){
@@ -202,7 +202,7 @@ jQuery(document).ready(function($){
                     audioHtml += '<tr>\
                         <td class="format">'+rdata[0]['formats'][maxIndex]['ext']+'</td>\
                         <td>'+kbtomb(rdata[0]['formats'][maxIndex]['filesize'])+' MB</td>\
-                        <td><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+rdata[0]['formats'][maxIndex]['ext']+'&dlId='+$.urlParam('v')+'&type=audio"  class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
+                        <td><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+rdata[0]['formats'][maxIndex]['ext']+'&dlId='+$.urlParam('v')+'&type=audio"  class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
                     </tr>';
                 }
                 var html = '<div class="result-thumb-wrapper">\
@@ -270,7 +270,6 @@ jQuery(document).ready(function($){
 
         }); 
     }
-
     
 });
 </script>

@@ -1,10 +1,9 @@
 from django.shortcuts import render, HttpResponse
 from django.urls import path, include
 from django.http import JsonResponse
-import ffmpeg
-from youtube_dl import YoutubeDL
-import requests
+import urllib.parse, urllib.request
 import os
+from youtube_dl import YoutubeDL
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
