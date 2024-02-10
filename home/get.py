@@ -70,11 +70,6 @@ def downloadContext(request):
             ydl.download(['https://www.youtube.com/watch?v='+request.GET['dlId']])
 
         
-        ##write file
-        # with open(os.path.join(BASE_DIR+"/video",filename) + '.mp4', 'wb') as f:
-        #     for data in response:         
-        #         f.write(data)     
-        #     f.close() 
         if(fetchFile):
             with open(os.path.join(BASE_DIR+'/'+fetchFile), 'rb') as f:
                 data = f.read()   
