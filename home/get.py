@@ -80,4 +80,4 @@ def downloadContext(request):
             return response
         return 'not found'
     else:
-        return HttpResponse('🤣')
+        return HttpResponse('Error')
