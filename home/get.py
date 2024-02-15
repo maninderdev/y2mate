@@ -27,7 +27,7 @@ def fetchdata(request):
 
         return JsonResponse(data, safe=False)
     else:
-        return HttpResponse('🤣')
+        return HttpResponse('Error')
     
 
 def downloadContext(request):
