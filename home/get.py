@@ -27,7 +27,7 @@ def fetchdata(request):
 
         return JsonResponse(data, safe=False)
     else:
-        return HttpResponse('Error')
+        return HttpResponse('Error get')
     
 
 def downloadContext(request):
@@ -80,4 +80,4 @@ def downloadContext(request):
             return response
         return 'not found'
     else:
-        return HttpResponse('Error')
+        return HttpResponse('Error get')
