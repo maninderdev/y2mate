@@ -32,7 +32,6 @@ def fetchdata(request):
 
 def downloadContext(request):
     if request.method == 'GET' and 'format' in request.GET:
-        
         class MyLogger(object):
             def debug(self, msg):
                 pass
@@ -47,6 +46,7 @@ def downloadContext(request):
 
         def my_hook(d):
             if d['status'] == 'downloading':
+                print(d)
                 return d['_percent_str']
             elif d['status'] == 'finished':
                 print(d)

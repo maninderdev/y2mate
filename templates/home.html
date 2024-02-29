@@ -176,7 +176,7 @@ jQuery(document).ready(function($){
                         audioHtml += '<tr>\
                             <td class="format">'+formats['ext']+'</td>\
                             <td>'+kbtomb(formats['filesize'])+' MB</td>\
-                            <td><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=audio" class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
+                            <td><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=audio" data-format="'+formats['format_id']+'" data-ext="'+formats['ext']+'" data-dlId="'+$.urlParam('v')+'" data-type="audio" class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a>{% csrf_token %}</td>\
                         </tr>';
                     }
                     if(formats['acodec'] != 'none' && formats['vcodec'] != 'none' && formats['ext'] == 'mp4'){
@@ -270,6 +270,31 @@ jQuery(document).ready(function($){
 
         }); 
     }
+
+    $(document).on('click', '.download-btn', function(e){
+        e.preventDefault();
+        console.log('click');
+        var getformat = $(this).attr('data-format'),
+        getext = $(this).attr('data-ext'),
+        getdlId = $(this).attr('data-dlId'),
+        gettype = $(this).attr('data-type');
+        $.ajax('{% url 'downloadContext' %}', {
+            type : 'GET',
+            data : {
+                'csrfmiddlewaretoken': $(this).next().val(),
+                'format' : getformat,
+                'ext' : getext,
+                'dlId' : getdlId,
+                'type' : gettype
+            },
+            beforeSend : function(){
+                console.log('start');
+            },
+            success: function(response){
+                window.open("{% url 'downloadContext' %}?format="+getformat+"&ext="+getext+"&dlId="+getdlId+"&type="+gettype+"");
+            }
+        });
+    });
     
 });
 </script>
