@@ -67,9 +67,27 @@
 <p>Step1: Select the format you want and click "Download" button. </p>
 <p>Step2: In new window, press "CTRL + S" to save video OR right click to video, then select "Save as Video".</p>
 </div>
+<div class="modal fade" id="progress-status" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="progressStatus" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+            <div class="head">
+                <div class="thumb"></div>
+                <div class="title"></div>
+            </div>
+        </div>
+        <div class="modal-body">
+          <div class="progress">
+            <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 0;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock body %}
 {% block customscript %}
 <script>
+    var progressModal = new bootstrap.Modal(document.getElementById('progress-status'));
 jQuery(document).ready(function($){
     function formValidate(form){
         if(form.val().length > 0){
@@ -137,7 +155,6 @@ jQuery(document).ready(function($){
         return arr[maxIndex]['number']; 
     } 
     function getdata(form){
-        console.log(form);
         $.ajax('{% url 'fetchdata' %}', {
             type : 'POST',
             data : form,
@@ -183,14 +200,14 @@ jQuery(document).ready(function($){
                         videoAudio += '<tr>\
                             <td class="format">'+formats['format_note']+'</td>\
                             <td>'+kbtomb(formats['filesize'])+' MB</td>\
-                            <td><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=video"  class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
+                            <td><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=video" data-format="'+formats['format_id']+'" data-ext="'+formats['ext']+'" data-dlId="'+$.urlParam('v')+'" data-type="video"  class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
                         </tr>';
                     }
                     if(formats['acodec'] == 'none' && formats['vcodec'] != 'none' && formats['ext'] == 'mp4'){
                         videoHtml += '<tr>\
                             <td class="format">'+formats['format_note']+'</td>\
                             <td>'+kbtomb(formats['filesize'])+' MB</td>\
-                            <td><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'+'+mp3id+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=video"  class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
+                            <td><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=video" data-format="'+formats['format_id']+'" data-ext="'+formats['ext']+'" data-dlId="'+$.urlParam('v')+'" data-type="video"  class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
                         </tr>';
                     }
                     if(formats['acodec'] != 'none' && formats['vcodec'] == 'none' && formats['ext'] == 'webm'){
@@ -202,7 +219,7 @@ jQuery(document).ready(function($){
                     audioHtml += '<tr>\
                         <td class="format">'+rdata[0]['formats'][maxIndex]['ext']+'</td>\
                         <td>'+kbtomb(rdata[0]['formats'][maxIndex]['filesize'])+' MB</td>\
-                        <td><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+rdata[0]['formats'][maxIndex]['ext']+'&dlId='+$.urlParam('v')+'&type=audio"  class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
+                        <td><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+rdata[0]['formats'][maxIndex]['format_id']+'&ext='+rdata[0]['formats'][maxIndex]['ext']+'&dlId='+$.urlParam('v')+'&type=audio" data-format="'+rdata[0]['formats'][maxIndex]['format_id']+'" data-ext="'+rdata[0]['formats'][maxIndex]['ext']+'" data-dlId="'+$.urlParam('v')+'" data-type="audio"   class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
                     </tr>';
                 }
                 var html = '<div class="result-thumb-wrapper">\
@@ -270,14 +287,19 @@ jQuery(document).ready(function($){
 
         }); 
     }
-
+    function progressReset(){
+        $('#progress-status .thumb').attr('class', 'thumb');
+        $('#progress-status .title').text('');
+        $('#progress-status .progress-bar').attr('style', 'width:0;').attr('aria-valuenow', '0').text('');
+    }
     $(document).on('click', '.download-btn', function(e){
         e.preventDefault();
         console.log('click');
         var getformat = $(this).attr('data-format'),
         getext = $(this).attr('data-ext'),
         getdlId = $(this).attr('data-dlId'),
-        gettype = $(this).attr('data-type');
+        gettype = $(this).attr('data-type'),
+        progressInterval;
         $.ajax('{% url 'downloadContext' %}', {
             type : 'GET',
             data : {
@@ -288,9 +310,34 @@ jQuery(document).ready(function($){
                 'type' : gettype
             },
             beforeSend : function(){
-                console.log('start');
+                $('#progress-status .thumb').addClass(gettype);
+                $('#progress-status .title').text($('.result-wrapper .title').text());
+                progressModal.show();
+                progressInterval = setInterval(function(){
+                    console.log('ajaxsendinner');
+                    $.ajax('{% url 'progress' %}', {
+                        type : 'GET',
+                        data : {
+                            'csrfmiddlewaretoken': $(this).next().val(),
+                            'progress': 'true'
+                        },
+                        beforeSend : function(){
+                            console.log('progressstart');
+                        },
+                        success: function(response){
+                            if(response.includes('%')){
+                                $('#progress-status .progress-bar').attr('style', 'width:'+response).attr('aria-valuenow', response).text(response);
+                            }
+                        }
+                    });
+                }, 1500);
+            },
+            ajaxSend: function(){
             },
             success: function(response){
+                clearInterval(progressInterval);
+                progressModal.hide();
+                progressReset();
                 window.open("{% url 'downloadContext' %}?format="+getformat+"&ext="+getext+"&dlId="+getdlId+"&type="+gettype+"");
             }
         });

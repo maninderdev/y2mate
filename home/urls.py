@@ -3,6 +3,7 @@ from django.urls import path, include
 from home import views
 from home.get import ( fetchdata )
 from home.get import ( downloadContext )
+from home.get import ( progress )
 from home.save import ( saveData )
 
 urlpatterns = [
@@ -11,5 +12,6 @@ urlpatterns = [
     path('contact', views.contact, name='contact'),
     path('post/data', fetchdata, name='fetchdata'),
     path('post/download', downloadContext, name='downloadContext'),
+    path('post/progress', progress, name='progress'),
     path('post/save', saveData, name='saveData'),
 ]

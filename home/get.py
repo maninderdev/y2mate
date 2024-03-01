@@ -4,7 +4,7 @@ from django.http import JsonResponse
 import urllib.parse, urllib.request
 import os
 from youtube_dl import YoutubeDL
-
+currentProgress = "Donetest"
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Create your views here.
@@ -44,8 +44,11 @@ def downloadContext(request):
 
 
 
+        global currentProgress
         def my_hook(d):
+            global currentProgress
             if d['status'] == 'downloading':
+                currentProgress = d['_percent_str']
                 print(d)
                 return d['_percent_str']
             elif d['status'] == 'finished':
@@ -54,7 +57,7 @@ def downloadContext(request):
                 fetchFile = d['filename']
 
 
-        dlformat = request.GET['format']+'/best'
+        dlformat = request.GET['format']
         dlext = request.GET['ext']
         dlType = 'video'
         if(request.GET['type'] == 'audio'):
@@ -79,5 +82,13 @@ def downloadContext(request):
             response['Content-Disposition'] = 'attachment; filename="'+filenamedl+'"'
             return response
         return 'not found'
+    else:
+        return HttpResponse('Error get')
+    
+
+def progress(request):
+    if request.method == 'GET' and 'progress' in request.GET:
+        global currentProgress
+        return HttpResponse(currentProgress)
     else:
         return HttpResponse('Error get')

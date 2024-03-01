@@ -612,6 +612,64 @@ footer.footer  div#copyright {
 .result-thumb-wrapper .result-content-wrapper table th:last-child {
     text-align: end;
 }
+#progress-status .modal-header {
+    padding: 0;
+    border: none;
+}
+
+#progress-status  .modal-body {
+    padding: 0;
+    border: none;
+}
+
+#progress-status  .modal-content {
+    border: none;
+    padding: 20px 20px;
+    border-radius: 18px;
+}
+
+#progress-status .modal-content .head {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#progress-status .modal-content .head .thumb {
+    width: 50px;
+    height: 50px;
+    flex: 0 0 50px;
+    margin-right: 10px;
+    background-image: url(../images/mp3.png);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+#progress-status .modal-content .head .thumb.video {
+    background-image: url(../images/mp4.png);
+}
+#progress-status .modal-content .head .thumb {
+    width: 50px;
+    height: 50px;
+    flex: 0 0 50px;
+    margin-right: 10px;
+}
+
+#progress-status .modal-content .head  .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    max-height: 46px;
+}
+#progress-status .progress {
+    height: 1.4rem;
+}
+#progress-status  .progress-bar {
+    color: #fff;
+    font-weight: 500;
+    font-size: 16px;
+}
 /*********Footer End***********/
 @media(min-width:992px){
     
