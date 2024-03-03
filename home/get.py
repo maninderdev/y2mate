@@ -89,6 +89,8 @@ def downloadContext(request):
 def progress(request):
     if request.method == 'GET' and 'progress' in request.GET:
         global currentProgress
-        return HttpResponse(currentProgress)
+        letCurrentProgress = currentProgress
+        currentProgress = 0
+        return HttpResponse(letCurrentProgress)
     else:
         return HttpResponse('Error get')
