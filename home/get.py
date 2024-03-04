@@ -3,7 +3,8 @@ from django.urls import path, include
 from django.http import JsonResponse
 import urllib.parse, urllib.request
 import os
-from youtube_dl import YoutubeDL
+# from youtube_dl import YoutubeDL
+from yt_dlp import YoutubeDL
 currentProgress = "Donetest"
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -49,10 +50,9 @@ def downloadContext(request):
             global currentProgress
             if d['status'] == 'downloading':
                 currentProgress = d['_percent_str']
-                print(d)
+                print(d['_percent_str'])
                 return d['_percent_str']
             elif d['status'] == 'finished':
-                print(d)
                 global fetchFile
                 fetchFile = d['filename']
 
@@ -75,11 +75,13 @@ def downloadContext(request):
         
         if(fetchFile):
             with open(os.path.join(BASE_DIR+'/'+fetchFile), 'rb') as f:
-                data = f.read()   
-            filenamedl = fetchFile.replace('context\\audio\\'+request.GET['format']+'\\', '')
-            filenamedl = filenamedl.replace('context\\video\\'+request.GET['format']+'\\', '')
+                filename = os.path.basename(f.name).split('/')[-1]
+                data = f.read()
             response = HttpResponse(data, content_type='application/'+dlType+'.'+dlext+'')
-            response['Content-Disposition'] = 'attachment; filename="'+filenamedl+'"'
+            filename_bytes = filename.encode('utf8')
+            decoded_filename = urllib.parse.unquote(filename_bytes.decode('utf-8'))
+            quoted_filename = urllib.parse.quote(decoded_filename)
+            response['Content-Disposition'] = 'attachment; filename="' + quoted_filename + '"'
             return response
         return 'not found'
     else:
