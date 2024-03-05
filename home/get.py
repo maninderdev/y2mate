@@ -85,12 +85,9 @@ def downloadContext(request):
         
         if(fetchFile):
             fetchFileMerge = fetchFile
-            print(fetchFileMerge)
             if 'merge' in request.GET:
                 fetchFileMerge = fetchFile.replace('.f140.m4a', '')
                 fetchFileMerge = fetchFileMerge+".mp4"
-            
-            print(fetchFileMerge)
             with open(os.path.join(BASE_DIR+'/'+fetchFileMerge), 'rb') as f:
                 filename = os.path.basename(f.name).split('/')[-1]
                 data = f.read()
