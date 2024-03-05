@@ -5,6 +5,7 @@ import urllib.parse, urllib.request
 import os
 # from youtube_dl import YoutubeDL
 from yt_dlp import YoutubeDL
+from moviepy.editor import VideoFileClip, AudioFileClip
 currentProgress = "Donetest"
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -46,6 +47,7 @@ def downloadContext(request):
 
 
         global currentProgress
+        currentProgress = 0
         def my_hook(d):
             global currentProgress
             if d['status'] == 'downloading':
@@ -63,18 +65,33 @@ def downloadContext(request):
         if(request.GET['type'] == 'audio'):
             dlType = 'audio'
 
+
+        ydl_format = dlformat
+        
+        if 'merge' in request.GET:
+            ydl_format = dlformat+'+'+request.GET['merge']
+
         ydl_opts = {
-            'format': dlformat,
+            'format': ydl_format,
             'logger': MyLogger(),
             'outtmpl': '/context/'+dlType+'/'+request.GET['format']+'/%(title)s-%(id)s.%(ext)s',
-            'progress_hooks': [my_hook],
+            'progress_hooks': [my_hook]
         }
+
+
         with YoutubeDL(ydl_opts) as ydl:
             ydl.download(['https://www.youtube.com/watch?v='+request.GET['dlId']])
 
         
         if(fetchFile):
-            with open(os.path.join(BASE_DIR+'/'+fetchFile), 'rb') as f:
+            fetchFileMerge = fetchFile
+            print(fetchFileMerge)
+            if 'merge' in request.GET:
+                fetchFileMerge = fetchFile.replace('.f140.m4a', '')
+                fetchFileMerge = fetchFileMerge+".mp4"
+            
+            print(fetchFileMerge)
+            with open(os.path.join(BASE_DIR+'/'+fetchFileMerge), 'rb') as f:
                 filename = os.path.basename(f.name).split('/')[-1]
                 data = f.read()
             response = HttpResponse(data, content_type='application/'+dlType+'.'+dlext+'')

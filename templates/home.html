@@ -197,7 +197,7 @@ jQuery(document).ready(function($){
                             <td><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=audio" data-format="'+formats['format_id']+'" data-ext="'+formats['ext']+'" data-dlId="'+$.urlParam('v')+'" data-type="audio" class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a>{% csrf_token %}</td>\
                         </tr>';
                     }
-                    if(formats['filesize'] && formats['acodec'] != 'none' && formats['vcodec'] != 'none' && formats['ext'] == 'mp4'){
+                    if(formats['acodec'] != 'none' && formats['vcodec'] != 'none' && formats['ext'] == 'mp4'){
                         videoAudio += '<tr>\
                             <td class="format">'+formats['format_note']+'</td>\
                             <td>'+kbtomb(formats['filesize'])+' MB</td>\
@@ -208,7 +208,7 @@ jQuery(document).ready(function($){
                         videoHtml += '<tr>\
                             <td class="format">'+formats['format_note']+'</td>\
                             <td>'+kbtomb(formats['filesize'])+' MB</td>\
-                            <td><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=video" data-format="'+formats['format_id']+'" data-ext="'+formats['ext']+'" data-dlId="'+$.urlParam('v')+'" data-type="video"  class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
+                            <td><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=video&merge='+mp3id+'" data-format="'+formats['format_id']+'" data-ext="'+formats['ext']+'" data-dlId="'+$.urlParam('v')+'" data-type="video" data-merge="'+mp3id+'" class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
                         </tr>';
                     }
                     if(formats['acodec'] != 'none' && formats['vcodec'] == 'none' && formats['ext'] == 'webm'){
@@ -300,16 +300,27 @@ jQuery(document).ready(function($){
         getext = $(this).attr('data-ext'),
         getdlId = $(this).attr('data-dlId'),
         gettype = $(this).attr('data-type'),
+        dataMergeAudio = {
+            'csrfmiddlewaretoken': $(this).next().val(),
+            'format' : getformat,
+            'ext' : getext,
+            'dlId' : getdlId,
+            'type' : gettype
+        },
         progressInterval;
-        $.ajax('{% url 'downloadContext' %}', {
-            type : 'GET',
-            data : {
+        if($(this).attr('data-merge')){
+            dataMergeAudio = {
                 'csrfmiddlewaretoken': $(this).next().val(),
                 'format' : getformat,
                 'ext' : getext,
                 'dlId' : getdlId,
-                'type' : gettype
-            },
+                'type' : gettype,
+                'merge' : $(this).attr('data-merge')
+            }
+        }
+        $.ajax('{% url 'downloadContext' %}', {
+            type : 'GET',
+            data : dataMergeAudio,
             beforeSend : function(){
                 $('#progress-status .thumb').addClass(gettype);
                 $('#progress-status .title').text($('.result-wrapper .title').text());
