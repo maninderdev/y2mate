@@ -482,6 +482,12 @@ span.loader-ele {
     padding: 16px 0;
     border-bottom: 1px solid #000;
 }
+.result-content-wrapper span.recommend {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    margin-right: 16px;
+}
 /*********Footer Start***********/
 footer.footer {
     padding: 40px 0;

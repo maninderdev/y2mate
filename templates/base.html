@@ -29,10 +29,10 @@
                     <div class="main-menu-wrapper">
                         <div class="menu-main-menu-container">
                             <ul id="menu-main-menu" class="menu">
-                                <li id="menu-item-43" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-16 current_page_item menu-item-43"><a href="/" aria-current="page" itemprop="url">Home</a></li>
-                                <li id="menu-item-30" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-30"><a href="/youtube-converter/" itemprop="url">Youtube Converter</a></li>
-                                <li id="menu-item-31" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-31"><a href="/youtube-downloader/" itemprop="url">Youtube Downloader</a></li>
-                                <li id="menu-item-32" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-32"><a href="/youtube-to-mp3/" itemprop="url">Youtube To MP3</a></li>
+                                <li id="menu-home" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home page_item page-item-16 menu-item-43"><a href="{% url 'home' %}" aria-current="page" itemprop="url">Home</a></li>
+                                <li id="menu-audio" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-30"><a href="{% url 'audio_download' %}" itemprop="url">Youtube Audio Converter</a></li>
+                                <li id="menu-video" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-31"><a href="{% url 'video_download' %}" itemprop="url">Youtube Video Downloader</a></li>
+                                <li id="menu-shorts" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-32"><a href="{% url 'shorts_download' %}" itemprop="url">Youtube Shorts Download</a></li>
                             </ul>
                         </div>
                     </div>
@@ -119,6 +119,12 @@
     <script type='text/javascript' src='/static/js/bootstrap.bundle.min.js?ver=6.3.2' id='bootstrap-js-js'></script>
     <script type='text/javascript' src='/static/js/jquery.cookie.js' id='jquery-cookie-js'></script>
     <script type='text/javascript' src='/static/js/custom.js?ver=6.3.2' id='custom-js'></script>
+    <script>
+        jQuery(document).ready(function($){
+            var currentMenuId = '#{% block currentActive %}{% endblock currentActive %}'
+            $(currentMenuId).addClass('current-menu-item current_page_item');
+        });
+    </script>
     {% block customscript %}{% endblock customscript %}
     
 </body>

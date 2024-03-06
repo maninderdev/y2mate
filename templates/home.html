@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %} Y2matecom YouTube Downloader and Converter – Download YouTube videos in MP3, MP4, 3GP | Y2mate.com{% endblock title %}
-
+{% block currentActive %}menu-home{% endblock currentActive %}
 {% block body %}
 <div class="hero-banner">
     <h1>Download Video and Audio from YouTube</h1>
@@ -211,10 +211,15 @@ jQuery(document).ready(function($){
                         </tr>';
                     }
                     if(formats['acodec'] != 'none' && formats['vcodec'] != 'none' && formats['ext'] == 'mp4'){
+                        console.log(formats, 'withautio');
+                        var fileInitAudioSize = formats['filesize'];
+                        if(fileInitAudioSize == null){
+                            fileInitAudioSize = formats['filesize_approx'];
+                        }
                         videoAudio += '<tr>\
                             <td class="format">'+formats['format_note']+'</td>\
-                            <td>'+kbtomb(formats['filesize'])+' MB</td>\
-                            <td><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=video" data-format="'+formats['format_id']+'" data-ext="'+formats['ext']+'" data-dlId="'+$.urlParam('v')+'" data-type="video"  class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
+                            <td>'+kbtomb(fileInitAudioSize)+' MB</td>\
+                            <td><span class="recommend"><img src="static/images/recommend.png"></span><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=video" data-format="'+formats['format_id']+'" data-ext="'+formats['ext']+'" data-dlId="'+$.urlParam('v')+'" data-type="video"  class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
                         </tr>';
                     }
                     if(!notInId.includes(formats['format_id']) && formats['filesize'] && formats['acodec'] == 'none' && formats['vcodec'] != 'none' && formats['ext'] == 'mp4'){
