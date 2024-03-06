@@ -18,15 +18,7 @@ def fetchdata(request):
         r = ydl.extract_info(url, download=False)
         # if any link will do 
         data = [{'formats': r['formats'], 'thumbnail' : r['thumbnail'], 'title' : r['title']}]
-        # datas = data.objects.values('structure').annotate(
-            # total=Count('structure')
-        # ).order_by('-total')
-        # dataStructure = json.dumps(list(data), cls=DjangoJSONEncoder)
-        print(data)
-        # dataStructure = serializers.serialize("json",data, fields=('structure',))
-        # if you want links with video and audio
-        # urls = [f['url'] for f in r['formats'] if f['acodec'] != 'none' and f['vcodec'] != 'none']
-
+        # print(data)
         return JsonResponse(data, safe=False)
     else:
         return HttpResponse('Error error')
@@ -87,7 +79,8 @@ def downloadContext(request):
             fetchFileMerge = fetchFile
             if 'merge' in request.GET:
                 fetchFileMerge = fetchFile.replace('.f140.m4a', '')
-                fetchFileMerge = fetchFileMerge+".mp4"
+                if not '.mp4' in fetchFileMerge: 
+                    fetchFileMerge = fetchFileMerge+".mp4"
             with open(os.path.join(BASE_DIR+'/'+fetchFileMerge), 'rb') as f:
                 filename = os.path.basename(f.name).split('/')[-1]
                 data = f.read()

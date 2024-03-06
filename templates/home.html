@@ -89,9 +89,17 @@
 <script>
     var progressModal = new bootstrap.Modal(document.getElementById('progress-status'));
 jQuery(document).ready(function($){
+    function RemoveParameterFromUrl(url, parameter) {
+        return url
+        .replace(new RegExp('[?&]' + parameter + '=[^&#]*(#.*)?$'), '$1')
+        .replace(new RegExp('([?&])' + parameter + '=[^&]*&'), '$1');
+    }
     function formValidate(form){
         if(form.val().length > 0){
             if(form.val().includes('youtube.com') || form.val().includes('youtu.be')){
+                if(form.val().includes('?si=')){
+                    form.val(RemoveParameterFromUrl(form.val(), 'si'));
+                }
                 const valuesInArray = $('.get_data').serializeArray();
                 const body = {};
                 valuesInArray.reduce((body, e)=>{
@@ -122,11 +130,17 @@ jQuery(document).ready(function($){
         return false;
     } 
     $.urlParam = function(name){
-        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec($('.form-y2-search').val());
-        if (results==null) {
-           return null;
+        if($('.form-y2-search').val().includes('youtube.com/shorts/') || $('.form-y2-search').val().includes('youtu.be/')){
+            var valIDArray = $('.form-y2-search').val().split("/");
+            var valIDGet = valIDArray[valIDArray.length - 1];
+            return valIDGet;
+        }else if($('.form-y2-search').val().includes('watch?v=')){
+            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec($('.form-y2-search').val());
+            if (results==null) {
+               return null;
+            }
+            return decodeURI(results[1]) || 0;
         }
-        return decodeURI(results[1]) || 0;
     }
     $('.get_data').on('submit', function(e){
         e.preventDefault();
@@ -182,7 +196,6 @@ jQuery(document).ready(function($){
                 </div>');
             },
             success: function(rdata){
-                console.log(rdata[0]['formats']);
                 var audioHtml = videoHtml = videoAudio = "";
                 var webmArray = []; 
                 var mp3id = "";
@@ -283,7 +296,9 @@ jQuery(document).ready(function($){
                 $('#results').html(html);
             },
             error: function(data){
-                console.log(data, 'sdf');
+                if(data.responseText.includes('Video unavailable')){
+                    $('#results').html('<p class="error invalid-url">Video unavailable. Please check url and try again</p>');
+                }
             }
 
         }); 
@@ -295,7 +310,6 @@ jQuery(document).ready(function($){
     }
     $(document).on('click', '.download-btn', function(e){
         e.preventDefault();
-        console.log('click');
         var getformat = $(this).attr('data-format'),
         getext = $(this).attr('data-ext'),
         getdlId = $(this).attr('data-dlId'),
