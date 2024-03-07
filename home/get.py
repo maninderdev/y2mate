@@ -1,11 +1,8 @@
-from django.shortcuts import render, HttpResponse
-from django.urls import path, include
+from django.shortcuts import HttpResponse
 from django.http import JsonResponse
 import urllib.parse, urllib.request
 import os
-# from youtube_dl import YoutubeDL
 from yt_dlp import YoutubeDL
-from moviepy.editor import VideoFileClip, AudioFileClip
 currentProgress = "Donetest"
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -16,9 +13,7 @@ def fetchdata(request):
         ydl = YoutubeDL()
         ydl.cache.remove()
         r = ydl.extract_info(url, download=False)
-        # if any link will do 
         data = [{'formats': r['formats'], 'thumbnail' : r['thumbnail'], 'title' : r['title']}]
-        # print(data)
         return JsonResponse(data, safe=False)
     else:
         return HttpResponse('Error error')
@@ -92,7 +87,7 @@ def downloadContext(request):
             return response
         return 'not found'
     else:
-        return HttpResponse('Error get Error')
+        return HttpResponse('Error get')
     
 
 def progress(request):
