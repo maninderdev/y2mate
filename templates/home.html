@@ -365,13 +365,31 @@ jQuery(document).ready(function($){
                     });
                 }, 1500);
             },
-            ajaxSend: function(){
-            },
             success: function(response){
                 clearInterval(progressInterval);
+                var dataUrl = response;
+                /*$dnl_link = $('<a></a>').attr({
+                    download:'testing.svg',
+                    href:dataUrl,
+                    id:'download-context',
+                    name: 'test.mp4',
+                })
+                $dnl_link.appendTo("body");
+                $('#download-context').get(0).click();*/
+                console.log(response);
+                var fileLink = document.createElement('a');
+                fileLink.download = 'test.mp4'; 
+
+                let blob = new Blob([response], {type: 'octet/stream'});
+
+                fileLink.href = URL.createObjectURL(blob);
+
+                fileLink.click();
+
+                URL.revokeObjectURL(fileLink.href);
                 progressModal.hide();
                 progressReset();
-                window.open("{% url 'downloadContext' %}?format="+getformat+"&ext="+getext+"&dlId="+getdlId+"&type="+gettype+"");
+                //window.open("{% url 'downloadContext' %}?format="+getformat+"&ext="+getext+"&dlId="+getdlId+"&type="+gettype+"");
             }
         });
     });

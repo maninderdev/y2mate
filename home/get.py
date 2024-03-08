@@ -61,7 +61,7 @@ def downloadContext(request):
         ydl_opts = {
             'format': ydl_format,
             'logger': MyLogger(),
-            'outtmpl': '/context/'+dlType+'/'+request.GET['format']+'/%(title)s-%(id)s.%(ext)s',
+            'outtmpl': '/static/context/'+dlType+'/'+request.GET['format']+'/%(title)s-%(id)s.%(ext)s',
             'progress_hooks': [my_hook]
         }
 
