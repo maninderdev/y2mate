@@ -207,11 +207,10 @@ jQuery(document).ready(function($){
                         audioHtml += '<tr>\
                             <td class="format">'+formats['ext']+'</td>\
                             <td>'+kbtomb(formats['filesize'])+' MB</td>\
-                            <td><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=audio" data-format="'+formats['format_id']+'" data-ext="'+formats['ext']+'" data-dlId="'+$.urlParam('v')+'" data-type="audio" class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a>{% csrf_token %}</td>\
+                            <td><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=audio" data-format="'+formats['format_id']+'" data-ext="'+formats['ext']+'" data-dlId="'+$.urlParam('v')+'" data-type="audio" data-ajax="true" class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a>{% csrf_token %}</td>\
                         </tr>';
                     }
                     if(formats['acodec'] != 'none' && formats['vcodec'] != 'none' && formats['ext'] == 'mp4'){
-                        console.log(formats, 'withautio');
                         var fileInitAudioSize = formats['filesize'];
                         if(fileInitAudioSize == null){
                             fileInitAudioSize = formats['filesize_approx'];
@@ -219,14 +218,14 @@ jQuery(document).ready(function($){
                         videoAudio += '<tr>\
                             <td class="format">'+formats['format_note']+'</td>\
                             <td>'+kbtomb(fileInitAudioSize)+' MB</td>\
-                            <td><span class="recommend"><img src="static/images/recommend.png"></span><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=video" data-format="'+formats['format_id']+'" data-ext="'+formats['ext']+'" data-dlId="'+$.urlParam('v')+'" data-type="video"  class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
+                            <td><span class="recommend"><img src="static/images/recommend.png"></span><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=video" data-format="'+formats['format_id']+'" data-ext="'+formats['ext']+'" data-dlId="'+$.urlParam('v')+'" data-type="video" data-ajax="true" class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
                         </tr>';
                     }
                     if(!notInId.includes(formats['format_id']) && formats['filesize'] && formats['acodec'] == 'none' && formats['vcodec'] != 'none' && formats['ext'] == 'mp4'){
                         videoHtml += '<tr>\
                             <td class="format">'+formats['format_note']+'</td>\
                             <td>'+kbtomb(formats['filesize'])+' MB</td>\
-                            <td><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=video&merge='+mp3id+'" data-format="'+formats['format_id']+'" data-ext="'+formats['ext']+'" data-dlId="'+$.urlParam('v')+'" data-type="video" data-merge="'+mp3id+'" class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
+                            <td><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+formats['format_id']+'&ext='+formats['ext']+'&dlId='+$.urlParam('v')+'&type=video&merge='+mp3id+'" data-format="'+formats['format_id']+'" data-ext="'+formats['ext']+'" data-dlId="'+$.urlParam('v')+'" data-type="video" data-merge="'+mp3id+'" data-ajax="true" class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
                         </tr>';
                     }
                     if(formats['acodec'] != 'none' && formats['vcodec'] == 'none' && formats['ext'] == 'webm'){
@@ -238,7 +237,7 @@ jQuery(document).ready(function($){
                     audioHtml += '<tr>\
                         <td class="format">'+rdata[0]['formats'][maxIndex]['ext']+'</td>\
                         <td>'+kbtomb(rdata[0]['formats'][maxIndex]['filesize'])+' MB</td>\
-                        <td><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+rdata[0]['formats'][maxIndex]['format_id']+'&ext='+rdata[0]['formats'][maxIndex]['ext']+'&dlId='+$.urlParam('v')+'&type=audio" data-format="'+rdata[0]['formats'][maxIndex]['format_id']+'" data-ext="'+rdata[0]['formats'][maxIndex]['ext']+'" data-dlId="'+$.urlParam('v')+'" data-type="audio"   class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
+                        <td><a target="_blank" href="'+formats['url']+'" class="btn btn-primary play-btn"><i class="fa-solid fa-play"></i>Play</a><a target="_blank" href="{% url 'downloadContext' %}?format='+rdata[0]['formats'][maxIndex]['format_id']+'&ext='+rdata[0]['formats'][maxIndex]['ext']+'&dlId='+$.urlParam('v')+'&type=audio" data-format="'+rdata[0]['formats'][maxIndex]['format_id']+'" data-ext="'+rdata[0]['formats'][maxIndex]['ext']+'" data-dlId="'+$.urlParam('v')+'" data-type="audio" data-ajax="true" class="btn btn-primary download-btn"><i class="fa-solid fa-download"></i>Download</a></td>\
                     </tr>';
                 }
                 var html = '<div class="result-thumb-wrapper">\
@@ -303,6 +302,8 @@ jQuery(document).ready(function($){
             error: function(data){
                 if(data.responseText.includes('Video unavailable')){
                     $('#results').html('<p class="error invalid-url">Video unavailable. Please check url and try again</p>');
+                }else if(data.responseText.includes('connection.HTTPSConnection')){
+                    $('#results').html('<p class="error invalid-url">Connection lost or experiencing slow speeds. Try again.</p>');
                 }
             }
 
@@ -328,14 +329,10 @@ jQuery(document).ready(function($){
         },
         progressInterval;
         if($(this).attr('data-merge')){
-            dataMergeAudio = {
-                'csrfmiddlewaretoken': $(this).next().val(),
-                'format' : getformat,
-                'ext' : getext,
-                'dlId' : getdlId,
-                'type' : gettype,
-                'merge' : $(this).attr('data-merge')
-            }
+            dataMergeAudio.merge = $(this).attr('data-merge');
+        }
+        if($(this).attr('data-ajax')){
+            dataMergeAudio.ajax = 'true';
         }
         $.ajax('{% url 'downloadContext' %}', {
             type : 'GET',
@@ -345,7 +342,6 @@ jQuery(document).ready(function($){
                 $('#progress-status .title').text($('.result-wrapper .title').text());
                 progressModal.show();
                 progressInterval = setInterval(function(){
-                    console.log('ajaxsendinner');
                     $.ajax('{% url 'progress' %}', {
                         type : 'GET',
                         data : {
@@ -365,19 +361,27 @@ jQuery(document).ready(function($){
                     });
                 }, 1500);
             },
-            success: function(response){
+            success: function(response, textStatus, xhr){
                 clearInterval(progressInterval);
-                var dataUrl = response;
-                /*$dnl_link = $('<a></a>').attr({
-                    download:'testing.svg',
-                    href:dataUrl,
-                    id:'download-context',
-                    name: 'test.mp4',
-                })
-                $dnl_link.appendTo("body");
-                $('#download-context').get(0).click();*/
+                progressModal.hide();
+                progressReset();
                 console.log(response);
-                var fileLink = document.createElement('a');
+                var contentType = xhr.getResponseHeader('Content-Type');
+                console.log(contentType);
+                if (contentType && contentType.indexOf('application/json') !== -1) {
+                    $dnl_link = $('<a></a>').attr({
+                        download: response['context'][0]['name'],
+                        href:response['context'][0]['path'],
+                        id:'download-context',
+                        name: response['context'][0]['name'],
+                    });
+                    $dnl_link.appendTo("body");
+                    $('#download-context').get(0).click();
+                    $dnl_link.remove();
+                } else {
+                    window.open("{% url 'downloadContext' %}?format="+getformat+"&ext="+getext+"&dlId="+getdlId+"&type="+gettype+"");
+                }
+                /*var fileLink = document.createElement('a');
                 fileLink.download = 'test.mp4'; 
 
                 let blob = new Blob([response], {type: 'octet/stream'});
@@ -386,9 +390,9 @@ jQuery(document).ready(function($){
 
                 fileLink.click();
 
-                URL.revokeObjectURL(fileLink.href);
+                URL.    (fileLink.href);
                 progressModal.hide();
-                progressReset();
+                progressReset();*/
                 //window.open("{% url 'downloadContext' %}?format="+getformat+"&ext="+getext+"&dlId="+getdlId+"&type="+gettype+"");
             }
         });

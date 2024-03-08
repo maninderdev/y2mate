@@ -35,6 +35,8 @@ def downloadContext(request):
 
         global currentProgress
         currentProgress = 0
+
+        fetchFile = ""
         def my_hook(d):
             global currentProgress
             if d['status'] == 'downloading':
@@ -67,15 +69,26 @@ def downloadContext(request):
 
 
         with YoutubeDL(ydl_opts) as ydl:
-            ydl.download(['https://www.youtube.com/watch?v='+request.GET['dlId']])
+            hfsgdhf =  ydl.download(['https://www.youtube.com/watch?v='+request.GET['dlId']])
 
-        
-        if(fetchFile):
+        print(hfsgdhf)
+        if fetchFile:
+            print(fetchFile)
             fetchFileMerge = fetchFile
             if 'merge' in request.GET:
                 fetchFileMerge = fetchFile.replace('.f140.m4a', '')
                 if not '.mp4' in fetchFileMerge: 
                     fetchFileMerge = fetchFileMerge+".mp4"
+            if 'ajax' in request.GET:
+                filenamedl = fetchFileMerge
+                filenamedl = filenamedl.replace('static\\context\\audio\\'+request.GET['format']+'\\', '')
+                filenamedl = filenamedl.replace('static\\context\\video\\'+request.GET['format']+'\\', '')
+                fileData = [
+                    { "name": filenamedl, "path": fetchFileMerge},
+                ]
+                json_data = {"context": fileData}
+                return JsonResponse(json_data, safe=False)
+                                    
             with open(os.path.join(BASE_DIR+'/'+fetchFileMerge), 'rb') as f:
                 filename = os.path.basename(f.name).split('/')[-1]
                 data = f.read()
