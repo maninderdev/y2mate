@@ -36,16 +36,15 @@ def downloadContext(request):
         global currentProgress
         currentProgress = 0
 
-        fetchFile = ""
         def my_hook(d):
-            global currentProgress
+            global currentProgress, fetchFile
             if d['status'] == 'downloading':
                 currentProgress = d['_percent_str']
                 print(d['_percent_str'])
                 return d['_percent_str']
             elif d['status'] == 'finished':
-                global fetchFile
                 fetchFile = d['filename']
+                return True 
 
 
         dlformat = request.GET['format']
@@ -63,21 +62,21 @@ def downloadContext(request):
         ydl_opts = {
             'format': ydl_format,
             'logger': MyLogger(),
-            'outtmpl': '/static/context/'+dlType+'/'+request.GET['format']+'/%(title)s-%(id)s.%(ext)s',
+            'outtmpl': '/static/context/'+dlType+'/'+request.GET['format']+'/%(title)s.%(ext)s',
             'progress_hooks': [my_hook]
         }
-
+        
 
         with YoutubeDL(ydl_opts) as ydl:
-            hfsgdhf =  ydl.download(['https://www.youtube.com/watch?v='+request.GET['dlId']])
+            ydl.download(['https://www.youtube.com/watch?v='+request.GET['dlId']])
+            
+        print(fetchFile)
 
-        print(hfsgdhf)
-        if fetchFile:
-            print(fetchFile)
+        if (fetchFile):
             fetchFileMerge = fetchFile
             if 'merge' in request.GET:
                 fetchFileMerge = fetchFile.replace('.f140.m4a', '')
-                if not '.mp4' in fetchFileMerge: 
+                if dlext == 'mp4': 
                     fetchFileMerge = fetchFileMerge+".mp4"
             if 'ajax' in request.GET:
                 filenamedl = fetchFileMerge
