@@ -97,7 +97,7 @@ def downloadContext(request):
             quoted_filename = urllib.parse.quote(decoded_filename)
             response['Content-Disposition'] = 'attachment; filename="' + quoted_filename + '"'
             return response
-        return 'not found'
+        return 'not found '
     else:
         return HttpResponse('Error get')
     
