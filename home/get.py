@@ -99,7 +99,7 @@ def downloadContext(request):
             return response
         return 'not found '
     else:
-        return HttpResponse('Error get hghg')
+        return HttpResponse('Error get')
     
 
 def progress(request):
