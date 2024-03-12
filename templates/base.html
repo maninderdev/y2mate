@@ -89,8 +89,9 @@
                     <p class="join-newsletter-heading">Join our newsletter to stay up to date.</p>
                     <div class="wpcf7 no-js" id="wpcf7-f42-o1" lang="en-US" dir="ltr">
                         <div class="screen-reader-response"><p role="status" aria-live="polite" aria-atomic="true"></p> <ul></ul></div>
-                        <form action="/dev/" method="post" class="wpcf7-form init" aria-label="Contact form" novalidate="novalidate" data-status="init">
+                        <form action="/" method="post" class="wpcf7-form init" aria-label="Contact form" novalidate="novalidate" data-status="init">
                         <div style="display: none;">
+                            {% csrf_token %}
                         <input type="hidden" name="_wpcf7" value="42" />
                         <input type="hidden" name="_wpcf7_version" value="5.7.7" />
                         <input type="hidden" name="_wpcf7_locale" value="en_US" />
@@ -98,12 +99,12 @@
                         <input type="hidden" name="_wpcf7_container_post" value="0" />
                         <input type="hidden" name="_wpcf7_posted_data_hash" value="" />
                         </div>
-                        <p><span class="wpcf7-form-control-wrap" data-name="your-email"><input size="40" class="wpcf7-form-control wpcf7-text wpcf7-email wpcf7-validates-as-required wpcf7-validates-as-email" aria-required="true" aria-invalid="false" placeholder="Enter Your Email" value="" type="email" name="your-email" /></span><br />
+                        <p class="mb-1"><span class="wpcf7-form-control-wrap" data-name="your-email"><input size="40" class="wpcf7-form-control wpcf7-text wpcf7-email wpcf7-validates-as-required wpcf7-validates-as-email" aria-required="true" aria-invalid="false" placeholder="Enter Your Email" value="" type="email" name="your-email" /></span><br />
                         <input class="wpcf7-form-control has-spinner wpcf7-submit" type="submit" value="Subscribe" />
                         </p><div class="wpcf7-response-output" aria-hidden="true"></div>
                         </form>
                         </div>
-                    <p class="sm-text">By subscribing you agree to with our Privacy Policy and provide consent to receive updates from our company.</p>
+                    <p class="sm-text mb-4">By subscribing you agree to with our Privacy Policy and provide consent to receive updates from our company.</p>
                     <p class="note">Note: We don’t sell your information for more information check <a href="/privacy-policy">Privacy & Policy</a></p>
                 </div>
             </div>

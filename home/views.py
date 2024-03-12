@@ -10,6 +10,7 @@ def index(request):
     }   
     return render(request, 'home.html', context)
 
+
 def video_download(request):
     getform = Getdata()
     context = {

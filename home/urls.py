@@ -17,4 +17,5 @@ urlpatterns = [
     path('post/download', downloadContext, name='downloadContext'),
     path('post/progress', progress, name='progress'),
     path('post/save', saveData, name='saveData'),
+    path('watch', views.index, name='watch'),
 ]
