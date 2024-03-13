@@ -579,7 +579,9 @@ footer.footer  p.note {
     font-size: 20px;
     line-height: 1.4;
 }
-
+a{
+    cursor: pointer;
+}
 footer.footer p.note a {font-size: inherit;line-height: inherit;color: var(--theme-primary);text-decoration: none;}
 
 footer.footer form.wpcf7-form {
