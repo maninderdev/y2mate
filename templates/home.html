@@ -88,7 +88,7 @@
 {% endblock body %}
 {% block customscript %}
 <script>
-    var progressModal = new bootstrap.Modal(document.getElementById('progress-status'));
+var progressModal = new bootstrap.Modal(document.getElementById('progress-status'));
 jQuery(document).ready(function($){
     function RemoveParameterFromUrl(url, parameter) {
         return url
@@ -399,6 +399,10 @@ jQuery(document).ready(function($){
         });
     });
     
+    {% if is_get_request and is_v_in_get %}
+        $("#form-y2-search").val("https://www.youtube.com/watch?v={{ is_v }}");
+        $("form.get_data").submit();
+    {% endif %}
 });
 </script>
 {% endblock customscript %}

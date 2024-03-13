@@ -7,9 +7,17 @@ def index(request):
     getform = Getdata()
     context = {
         'getform' : getform
-    }   
-    return render(request, 'home.html', context)
+    }
+    is_get_request = request.method == 'GET'
+    is_v_in_get = 'v' in request.GET   
+    return render(request, 'home.html', {
+        'is_get_request': is_get_request,
+        'is_v_in_get': is_v_in_get,
+        'is_v' : request.GET.get('v', None)
+    })
 
+def about(request):
+    return render(request, 'about.html')
 
 def video_download(request):
     getform = Getdata()
@@ -32,8 +40,8 @@ def shorts_download(request):
     }   
     return render(request, 'shorts-download.html', context)
 
-def about(request):
-    return HttpResponse('aboutpage')
+# def about(request):
+#     return HttpResponse('aboutpage')
 
 def contact(request):
     return HttpResponse('contactpage')
