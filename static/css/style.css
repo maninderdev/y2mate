@@ -211,6 +211,7 @@ header.header .main-menu-wrapper ul li:last-child {
 
 .custom-container > main#content {
     padding: 0;
+    flex-grow: 1;
 }
 @media(min-width:1400px){
 .custom-container {
