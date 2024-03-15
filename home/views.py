@@ -1,13 +1,8 @@
 from django.shortcuts import render, HttpResponse
 from django.urls import path, include
-from .models import Getdata
 
 # Create your views here.
 def index(request):
-    getform = Getdata()
-    context = {
-        'getform' : getform
-    }
     is_get_request = request.method == 'GET'
     is_v_in_get = 'v' in request.GET   
     return render(request, 'home.html', {
