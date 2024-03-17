@@ -54,7 +54,7 @@ def downloadContext(request):
             dlType = 'audio'
 
 
-        ydl_format = dlformat
+        ydl_format = dlformat 
         
         if 'merge' in request.GET:
             ydl_format = dlformat+'+'+request.GET['merge']
