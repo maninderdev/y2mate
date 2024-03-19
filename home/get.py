@@ -16,7 +16,7 @@ def fetchdata(request):
         data = [{'formats': r['formats'], 'thumbnail' : r['thumbnail'], 'title' : r['title']}]
         return JsonResponse(data, safe=False)
     else:
-        return HttpResponse('Error error')
+        return HttpResponse('Error error df')
     
 
 def downloadContext(request):
