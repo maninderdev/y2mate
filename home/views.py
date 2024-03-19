@@ -15,25 +15,13 @@ def about(request):
     return render(request, 'about.html')
 
 def video_download(request):
-    getform = Getdata()
-    context = {
-        'getform' : getform
-    }   
-    return render(request, 'video-download.html', context)
+    return render(request, 'video-download.html')
 
 def audio_download(request):
-    getform = Getdata()
-    context = {
-        'getform' : getform
-    }   
-    return render(request, 'audio-download.html', context)
+    return render(request, 'audio-download.html')
 
 def shorts_download(request):
-    getform = Getdata()
-    context = {
-        'getform' : getform
-    }   
-    return render(request, 'shorts-download.html', context)
+    return render(request, 'shorts-download.html')
 
 # def about(request):
 #     return HttpResponse('aboutpage')
