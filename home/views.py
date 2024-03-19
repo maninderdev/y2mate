@@ -21,7 +21,7 @@ def audio_download(request):
     return render(request, 'audio-download.html')
 
 def shorts_download(request):
-    return render(request, 'shorts-download.html')
+    return render(request, 'shorts-download.html') 
 
 # def about(request):
 #     return HttpResponse('aboutpage')
