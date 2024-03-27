@@ -8,7 +8,6 @@
     <form action="" class="get_data">
         {% csrf_token %}
         <input type="text" name="get" placeholder="Search Query OR Paste Link Here..." class="form-y2-search" id="form-y2-search" value="">
-        {{ getform.as_p }}
         <button type="submit" class="form-y2-submit">Search</button>
     </form>
     <p>By using our service you are accepting our <a href="<?php echo home_url();?>/privacy-policy">Privacy Policy</a>.</p>
